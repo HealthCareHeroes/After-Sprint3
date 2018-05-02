@@ -28,6 +28,7 @@ public class LoginController {
 		System.out.println(login.getUserName());
 		System.out.println(login.getPassword());
 		User user = userservice.validateUser(login);
+		System.out.println(user.getRole());
 		return user;
 	}
 } // end of class

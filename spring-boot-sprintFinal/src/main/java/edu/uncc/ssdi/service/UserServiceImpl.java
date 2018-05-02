@@ -38,14 +38,21 @@ public class UserServiceImpl implements UserService {
 	public User saveUser(User user) {
 
 		String id = null;
+		
 		try {
+			if(user.getDigitalId() == null) {
+				
+			
 			id = sysObject.generateDigitalProfileKey(user.getId());
 
 			if (findByDigitalId(id).size() > 0)
 				throw new DataExistsErrorException("Digital Id Already exists");
 
 			user.setDigitalId(id);
-			System.out.println("->" + id);
+	
+			
+			}
+			
 
 		} catch (DataExistsErrorException e) {
 

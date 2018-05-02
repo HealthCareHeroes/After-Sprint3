@@ -54,6 +54,7 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 	<script type="text/javascript">
+	
 		$("input").change(function() {
 			document.getElementById("error").innerHTML = "";
 		});
@@ -82,6 +83,12 @@
 														sessionStorage.setItem(
 																"userid",
 																data.id);
+														sessionStorage.setItem(
+																"fname",
+																data.firstName);
+														sessionStorage.setItem(
+																"role",
+																data.role);
 														window.location
 																.replace("http://localhost:8080/index.html");
 													}

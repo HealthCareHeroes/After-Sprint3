@@ -40,10 +40,11 @@ public class UserDaoImpl implements UserDao {
 			stmt.setString(1, email);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
-				System.out.println("Here");
+				
 				user.setId(Integer.valueOf(rs.getString("id")));
 				user.setEmail((rs.getString("email")));
 				user.setFirstName((rs.getString("first_name")));
+				
 			}
 			stmt.close();
 		} catch (SQLException e) {
@@ -56,9 +57,12 @@ public class UserDaoImpl implements UserDao {
 	class UserMapper implements RowMapper<User> {
 		public User mapRow(ResultSet rs, int arg1) throws SQLException {
 			User user = new User();
+			System.out.println(rs.getString("role"));
+			System.out.println(rs.getString("first_name"));
 			user.setId(Integer.valueOf(rs.getString("id")));
 			user.setEmail((rs.getString("email")));
 			user.setFirstName((rs.getString("first_name")));
+			user.setRole((rs.getString("role")));
 			return user;
 		}
 	} // end of UserMapper class
