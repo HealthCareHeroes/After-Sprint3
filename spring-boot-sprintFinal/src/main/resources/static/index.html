@@ -27,7 +27,8 @@
 				</a>
 					<div class="profile">
 						<div class="profile-image">
-							<img src="assets/images/users/no-image.jpg" alt="pic missing" />
+													<img ng-show="IsDoctor()" src="assets/images/users/doctor.jpg" alt="pic missing" />
+													<img ng-show="IsPatient()" src="assets/images/users/no-image.jpg" alt="pic missing" />
 						</div>
 						<div class="profile-data">
 							<div class="profile-data-name">{{fname}}</div>
@@ -50,9 +51,9 @@
 					<li><a href="/index.html">Home</a></li>
 					<li><a href="/view-profile.html">Profile</a></li>
 					<li><a href="/permissions.html">Permissions</a></li>
-					<li><a href="/medical-history.html">Medical History</a></li>
+					<li ng-show="IsPatient()"><a href="/medical-history.html">Medical History</a></li>
 					<li ><a href="/view-doctor.html">Doctors</a></li>
-					<li ng-show="IsDoctor()"><a href="/view-doctor.html">Patients</a></li>
+					<li ng-show="IsDoctor()"><a href="/view-patients.html">Patients</a></li>
 				</ul>
 				
 			</div>

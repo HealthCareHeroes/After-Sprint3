@@ -14,5 +14,9 @@
 				
 				return $scope.role == "DOCTOR";
 			}
-
+			
+			$scope.IsPatient = function(){
+				
+				return $scope.role == "PATIENT";
+			}
 		});

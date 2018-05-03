@@ -13,11 +13,11 @@
 	href="css/theme-default.css" />
 <!-- EOF CSS INCLUDE -->
 </head>
-<body>
+<body ng-app="app" ng-controller="NavController">
 	<!-- START PAGE CONTAINER -->
 	<div class="page-container">
 		<!-- START PAGE SIDEBAR -->
-		<div class="page-sidebar" ng-controller="NavController">
+		<div class="page-sidebar">
 			<!-- START X-NAVIGATION -->
 			<ul class="x-navigation">
 				<li class="xn-logo"><a href="index.html">Healthify</a> <a
@@ -26,8 +26,9 @@
 						src="assets/images/users/avatar.jpg" alt="John Doe" />
 				</a>
 					<div class="profile">
-						<div class="profile-image">
-							<img src="assets/images/users/no-image.jpg" alt="pic missing" />
+							<div class="profile-image">
+													<img ng-show="IsDoctor()" src="assets/images/users/doctor.jpg" alt="pic missing" />
+													<img ng-show="IsPatient()" src="assets/images/users/no-image.jpg" alt="pic missing" />
 						</div>
 					<div class="profile-data">
 							<div class="profile-data-name">{{fname}}</div>
@@ -48,7 +49,7 @@
 					<li><a href="/index.html">Home</a></li>
 					<li><a href="/view-profile.html">Profile</a></li>
 					<li><a href="/permissions.html">Permissions</a></li>
-					<li><a href="/medical-history.html">Medical History</a></li>
+					<li ng-show="IsPatient()"><a href="/medical-history.html">Medical History</a></li>
 					<li ><a href="/view-doctor.html">Doctors</a></li>
 					<li ng-show="IsDoctor()"><a href="/view-doctor.html">Patients</a></li>
 				</ul>
@@ -114,32 +115,30 @@
 										<div class="messages messages-img">
 											<div class="item">
 												<div class="image">
-													<img src="assets/images/users/user.jpg"
+													<img src="assets/images/users/no-image.jpg"
 														alt="Dmitry Ivaniuk">
 												</div>
 												<div class="text">
 													<div class="heading">
-														<a href="#">Anurag Shahi</a>
+														<a href="#">{{fname}}</a>
 														<!--   <span class="date">08:39</span>-->
 													</div>
-													<form class="form-horizontal" name="permForm" novalidate
-														ng-app="formValidationApp" ng-controller="ValidationCtrl">
+													<form class="form-horizontal" name="permForm" novalidate>
 
 														<div class="form-group" align="center">
-															<label> I want to give my Healthcare Providers
-																access to my medical records</label> <br />
+															<label> I would like to grant access to my medical records</label> <br />
 														</div>
 														<div class="form-group">
 															<div class="col-md-2"></div>
 															<div class="col-md-3">
 																<label class="switch"><label> YES</label> <input
-																	type="radio" name="permStatus" checked
+																	type="radio" name="permStatus" 
 																	ng-model="permStatus" value="1" /> <span></span> </label>
 															</div>
 															<div class="col-md-2"></div>
 															<div class="col-md-3">
 																<label class="switch"><label> NO </label> <input
-																	type="radio" name="permStatus" ng-model="permStatus"
+																	type="radio" name="permStatus" ng-model="permStatus" checked
 																	value="0" /> <span></span> </label>
 															</div>
 															<div class="col-md-2">
@@ -246,20 +245,7 @@
 			});
 	
 	
-	var app = angular.module("app", []);
-	app.controller("NavController", function($scope) {
-	
-		$scope.userid =sessionStorage.getItem("userid");
-		$scope.fname =sessionStorage.getItem("fname");
-		$scope.role =sessionStorage.getItem("role").toUpperCase();
-		
-		
-		$scope.IsDoctor = function(){
-			
-			return $scope.role == "DOCTOR";
-		}
 
-	});
 	function getUrlVars() {
 		var vars = {};
 		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -271,11 +257,38 @@
 	
 	
 	
-		var app = angular.module("formValidationApp", []);
+		var app = angular.module("app", []);
 		app
 				.controller(
-						"ValidationCtrl",
+						"NavController",
 						function($scope, $http) {
+							
+							
+							
+							
+							
+							
+							$scope.userid =sessionStorage.getItem("userid");
+							$scope.fname =sessionStorage.getItem("fname");
+							$scope.role =sessionStorage.getItem("role").toUpperCase();
+							
+							
+							$scope.IsDoctor = function(){
+								
+								return $scope.role == "DOCTOR";
+							}
+							
+							$scope.IsPatient = function(){
+								
+								return $scope.role == "PATIENT";
+							}
+							
+							
+							
+							
+							
+							
+							
 							$http.defaults.headers.post["Content-Type"] = "application/json";
 							$scope.submit = function() {
 								var userid = sessionStorage.getItem("userid");
