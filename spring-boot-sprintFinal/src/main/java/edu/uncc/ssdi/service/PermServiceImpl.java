@@ -42,4 +42,41 @@ public class PermServiceImpl implements PermService {
 		return  permDao.getAllRequests(digitalId);
 	}
 
+
+
+	@Override
+	public int checkPermission(Permission permObject) {
+		
+		Double d = Double.parseDouble(permObject.getId());
+		Long access_id = d.longValue();
+	//	Long access_id = Long.parseLong(permObject.getId());
+		
+		User userObject = userService.findById(access_id);
+		permObject.setId( userObject.getDigitalId() );
+		
+		
+		
+		int stat =  permDao.checkPermission(permObject);
+	
+		return stat;
+	}
+
+
+
+	@Override
+	public int reqPermission(Permission permObject) {
+		
+		
+		Double d = Double.parseDouble(permObject.getId());
+		Long access_id = d.longValue();
+	//	Long access_id = Long.parseLong(permObject.getId());
+		
+		User userObject = userService.findById(access_id);
+		permObject.setId( userObject.getDigitalId() );
+		
+		return permDao.reqPermission(permObject);
+		
+		
+	}
+
 } // end of class

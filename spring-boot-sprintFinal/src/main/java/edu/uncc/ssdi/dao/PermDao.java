@@ -9,6 +9,10 @@ public interface PermDao {
 	int givePermission(Permission permObject) ;
 
 	List<Permission> getAllRequests(String digitalId);
+
+	int checkPermission(Permission permObject);
+
+	int reqPermission(Permission permObject);
 	
 	
 }

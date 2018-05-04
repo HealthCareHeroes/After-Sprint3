@@ -1,16 +1,26 @@
 package edu.uncc.ssdi.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Permission {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "PERM_ID")
+	private long permId;
+	
+	@Column(name = "DIGITAL_ID")
 	private String id;
 	
+	@Column(name = "ACCESS_BY")
 	private long accessByUserId;
 	
+	@Column(name = "STATUS")
 	private int status;
 
 	

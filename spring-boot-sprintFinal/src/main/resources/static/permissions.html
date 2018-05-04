@@ -48,10 +48,10 @@
 				<ul>
 					<li><a href="/index.html">Home</a></li>
 					<li><a href="/view-profile.html">Profile</a></li>
-					<li><a href="/permissions.html">Permissions</a></li>
+					<li ng-show="IsPatient()"><a href="/permissions.html">Permissions</a></li>
 					<li ng-show="IsPatient()"><a href="/medical-history.html">Medical History</a></li>
 					<li ><a href="/view-doctor.html">Doctors</a></li>
-					<li ng-show="IsDoctor()"><a href="/view-doctor.html">Patients</a></li>
+					<li ng-show="IsDoctor()"><a href="/view-patients.html">Patients</a></li>
 				</ul>
 				
 			</div>
@@ -325,7 +325,7 @@
 									 '<td>' + record.dateOfVisit + '</td>' +
 									'<td>' + record.dateOfRelease + '</td>' +
 									'<td>' + record.releaseStatus + '</td>' + */
-									"<td> <button id='id1' onClick='submitReq("+dId+")'>Action </button> </td>"+
+									"<td> <button class='btn btn-info' id='id1' onClick='submitReq("+dId+")'>Action </button> </td>"+
 									'</tr>';
 				$('#medRecords tbody').append(recordRow);
 	        });

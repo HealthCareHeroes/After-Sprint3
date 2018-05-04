@@ -12,6 +12,10 @@ public interface PermService {
 	int grantPermission( Permission permObject);
 
 	List<Permission> getAllRequests(Long id);
+
+	int checkPermission(Permission permObject);
+
+	int reqPermission(Permission permObject);
 	
 	
 }

@@ -22,7 +22,7 @@
 				<li class="xn-logo"><a href="index.html">Healthify</a> <a
 					href="#" class="x-navigation-control"></a></li>
 				<li class="xn-profile"><a href="#" class="profile-mini"> <img
-						src="assets/images/users/userProfile.jpg" alt="picture" />
+						src="assets/images/users/no-image.jpg" alt="picture" />
 				</a>
 				<div class="profile">
 							<div class="profile-image">
@@ -45,10 +45,10 @@
 				<ul>
 					<li><a href="/index.html">Home</a></li>
 					<li><a href="/view-profile.html">Profile</a></li>
-					<li><a href="/permissions.html">Permissions</a></li>
+					<li ng-show="IsPatient()"><a href="/permissions.html">Permissions</a></li>
 					<li ng-show="IsPatient()"><a href="/medical-history.html">Medical History</a></li>
 					<li ><a href="/view-doctor.html">Doctors</a></li>
-					<li ng-show="IsDoctor()"><a href="/view-doctor.html">Patients</a></li>
+					<li ng-show="IsDoctor()"><a href="/view-patients.html">Patients</a></li>
 				</ul>
 				
 			</div>
@@ -86,6 +86,7 @@
 											<th>First Name</th>
 											<th>Last Name</th>
 											<th>Email</th>
+											<th>Send Request</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -187,6 +188,133 @@
 	
 	<script type="text/javascript" src="js/navigations.js"></script>
 	<script type="text/javascript">
+	
+	var globalList ;
+	
+	function viewReport(medId){
+		
+		sessionStorage.setItem("medid",medId);
+		window.location
+		.replace("http://localhost:8080/medical-history2.html");
+	}
+	
+	
+	function traverseList(){
+		
+	
+			 
+		$.each(globalList, function(i, patient) {
+			
+			var trId = document.getElementById(patient.id);
+			var stat = 	checkPerm(patient.id);
+			
+			if(stat == 4){
+				//alert("You can req Access");
+				// $(trId).append('<td>req Access </td>');
+				  $(trId).append("<td><button class='btn btn-default' id='id1' disabled> Request Sent </button>  </td>");
+				//recordRow	= recordRow +  "<td> <button id='id1' onClick='submitReq("+patient.id+")'>Send Request </button> </td>";
+					
+			}
+			else if(stat == 1){
+				
+				//alert("Req granted");
+			//	 $(trId).append('<td>Req granted</td>');
+				 $(trId).append("<td> <button class='btn btn-success' id='id1' onClick='viewReport("+patient.id+")'>View Report </button> </td>");
+				//recordRow	= recordRow + "<td> <button id='id1' onClick='viewReport("+patient.id+")'>View Report </button> </td>"
+					
+			}else if(stat == 0){
+				
+				//alert("req deneied");
+				 $(trId).append("<td><button class='btn btn-danger' id='id1' disabled> Request Denied </button>  </td>");
+				// $(trId).append('<td>req denied </td>');
+
+			//	recordRow	= recordRow + "<td> <button id='id1' disabled> Request Denied </button> </td>"
+					
+			}else 
+				{
+				 $(trId).append("<td> <button class='btn btn-info' id='id1' onClick='submitReq("+patient.id+")'>Send Request </button> </td>");
+				}
+			
+		});
+		
+	}
+	
+	
+	  function submitReq(data){
+		 
+			var Parameters = {
+					id : data,
+					accessByUserId : sessionStorage.getItem("userid")
+				};
+			
+			
+		  $.ajax({
+			  
+			  
+				type : "GET",
+				// getUsers of role patient
+				url : "http://localhost:8080/reqPermission/",
+				type : 'POST',
+				 async:false,
+				headers: { 
+			        'Accept': 'application/json',
+			        'Content-Type': 'application/json' 
+			    },
+				data : JSON.stringify(Parameters),
+				success : function(result) {
+					//alert(" Action taken ... ");
+					
+					window.location
+					.replace("http://localhost:8080/view-patients.html");
+				},
+				error : function(e) {
+					alert("ERROR: ", e);
+					console.log("ERROR: ", e);
+				}
+			});
+		    	
+		    }
+
+	  
+	  function checkPerm(data){
+			
+		 var status= 5;
+			var Parameters = {
+					id : data,
+					accessByUserId : sessionStorage.getItem("userid")
+				};
+			
+		  //alert("Check  : "+Parameters.id + " , " +Parameters.accessByUserId );	
+		  $.ajax({
+			  
+			  
+				type : "GET",
+				// getUsers of role patient
+				url : "http://localhost:8080/checkPermission/",
+				async:false,
+				type : 'POST',
+				headers: { 
+			        'Accept': 'application/json',
+			        'Content-Type': 'application/json' 
+			    },
+				data : JSON.stringify(Parameters),
+				success : function(result) {
+					//alert("permission status : " +result );
+					status =  result;
+					
+				},
+				error : function(e) {
+					alert("ERROR: ", e);
+					console.log("ERROR: ", e);
+				}
+			});
+		    	
+		  
+		  return status;
+		    }
+
+	  
+	  
 		$(document).ready(
 				function() {
 					
@@ -200,19 +328,26 @@
 					}
 					
 					ajaxGet();
+					traverseList();
+					
 					// DO GET
 					function ajaxGet() {
 						$.ajax({
 							type : "GET",
 							// getUsers of role patient
 							url : "http://localhost:8080/getUsers/patient",
+							 async:false,
 							success : function(result) {
+								globalList = result;
 								$.each(result, function(i, patient) {
-									var recordRow = '<tr>' 
+									var recordRow = "<tr id='"+patient.id+"'>" 
 											+ '<td>' + patient.firstName + '</td>'
 											+ '<td>' + patient.lastName + '</td>'
-											+ '<td>' + patient.email + '</td>'
-											+ '</tr>';
+											+ '<td>' + patient.email + '</td>';
+											
+							
+											
+										recordRow	= recordRow + '</tr>';
 									$('#patients tbody').append(recordRow);
 								});
 							},

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class PermissionController {
 	@RequestMapping(value="/givePermission/", method = RequestMethod.PUT) // Map ONLY GET Requests
 	public @ResponseBody int givePermission(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody Permission permObj) {
-		System.out.println("inside perm controller  : " + permObj.getId());
+	
 		int stat = permService.grantPermission(permObj);
 		return stat;
 	}
@@ -37,5 +38,20 @@ public class PermissionController {
 		return (List<Permission>) permService.getAllRequests(id);
 	}
 	
+	
+	@RequestMapping(value = "/checkPermission/", method = RequestMethod.POST) // Map ONLY GET Requests
+	public @ResponseBody int checkPermission(@RequestBody Permission permObj) {
+		
+		System.out.println("Anurg param : "+ permObj.getId() +" , "+permObj.getAccessByUserId());
+		int stat = permService.checkPermission(permObj);
+		System.out.println(stat);
+		return stat;
+	}
+	
+	@RequestMapping(value = "/reqPermission/", method = RequestMethod.POST) // Map ONLY GET Requests
+	public @ResponseBody int reqPermission(@RequestBody Permission permObj) {
+		
+		return  permService.reqPermission(permObj);
+	}
 	
 } // end of class

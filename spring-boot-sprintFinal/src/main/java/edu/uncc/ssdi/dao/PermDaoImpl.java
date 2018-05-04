@@ -50,6 +50,37 @@ public class PermDaoImpl implements PermDao{
 		
 		
 	}
+	
+	
+	@Override
+	public int reqPermission(Permission permObject) {
+	
+		
+	//	System.out.println(permObject.getStatus() + " , "+ permObject.getAccessByUserId() + " ,  "+ permObject.getId() );
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			int bool = 0;
+			try {
+
+				conn = DBConnection.getDBConnection();
+
+				String query = "insert into `permission`(digital_id, access_by, status)  values(?,?,4)";
+				stmt = conn.prepareStatement(query);
+				
+				stmt.setString(1, permObject.getId());
+				stmt.setLong(2, permObject.getAccessByUserId());
+				bool = stmt.executeUpdate();
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return bool;
+
+		
+		
+		
+		
+	}
 
 	@Override
 	public List<Permission> getAllRequests(String digitalId) {
@@ -96,6 +127,38 @@ public class PermDaoImpl implements PermDao{
 		
 		
 		
+	}
+
+	@Override
+	public int checkPermission(Permission permObject) {
+		 int status = 5;
+			Connection conn = null;
+			PreparedStatement stmt = null;
+		
+			try {
+
+				conn = DBConnection.getDBConnection();
+
+				String query = "select status from  `permission` where digital_id  =  ? and  `access_by` = ? ";
+				stmt = conn.prepareStatement(query);
+			
+				stmt.setString(1, permObject.getId());
+				stmt.setLong(2, permObject.getAccessByUserId());
+				
+				ResultSet rs = stmt.executeQuery();
+				
+				
+				if (rs.next()) {
+					status = rs.getInt("status");
+				}
+		
+
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return status;
+
 	}
 
 }
