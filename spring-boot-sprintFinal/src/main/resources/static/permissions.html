@@ -288,6 +288,49 @@
 		<script type="text/javascript" src="js/navigations.js"></script>
 	
 	<script type="text/javascript">
+	var gList ;
+	
+	function traverseList(data){
+	
+		$.each(data, function(i, doctor) {
+			var tdId = document.getElementById(doctor.accessByUserId);
+			var data = 	fetchUser(doctor.accessByUserId);
+			
+				  $(tdId).append(data);
+
+			
+		});
+		
+	}
+	
+	 function fetchUser(data){
+		var status = "";
+		 $.ajax({
+			  
+			  
+				type : "GET",
+				// getUsers of role patient
+				url : "http://localhost:8080/getUser/"+data,
+				async:false,
+				type : 'GET',
+				success : function(result) {
+					//alert("permission status : " +result );
+					status =  result.firstName + " " + result.lastName + " [ " + result.email+" ]";
+					
+				},
+				error : function(e) {
+					alert("ERROR: ", e);
+					console.log("ERROR: ", e);
+				}
+			});
+		    	
+		  
+		  return status;
+		    }
+
+
+	
+	
 	$(document)
 	.ready(
 			function() {
@@ -313,13 +356,13 @@
             headers: { "Accept": "application/json;odata=verbose" }
         }).success(function (data, status, headers, config) {
             
-        	//$scope.requestList = data;
+        	gList = data;
         
         	$.each(data, function(i, doctor){
         		
         		var dId = doctor.accessByUserId;
 				var recordRow = '<tr>' +
-									'<td>' + doctor.accessByUserId + '</td>' +
+									"<td id='"+doctor.accessByUserId+"'></td>" +
 									/*'<td>' + doctor.lastName + '</td>' +
 									'<td>' + doctor.email + '</td>' +
 									 '<td>' + record.dateOfVisit + '</td>' +
@@ -330,9 +373,11 @@
 				$('#medRecords tbody').append(recordRow);
 	        });
         	
+        	traverseList(data);
         	
         });
    
+	traverseList();
 	  //document ends
     });
 	

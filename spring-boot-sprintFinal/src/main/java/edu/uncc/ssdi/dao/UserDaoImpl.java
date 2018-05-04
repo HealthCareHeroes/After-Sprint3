@@ -20,11 +20,18 @@ public class UserDaoImpl implements UserDao {
 	JdbcTemplate jdbcTemplate;
 	@Override
 	public User validateUser(Login login) {
+		
+		try {
+			
+		
 		// validate if the User exists
 		String sql = "select * from user where email= '" + login.getUserName() + "' and password = '"
 				+ login.getPassword() + "'";
 		List<User> users = jdbcTemplate.query(sql, new UserMapper());
 		return users.size() > 0 ? users.get(0) : null;
+		}catch(Exception e) {
+			return null;
+		}
 	}
 	
 	@Override

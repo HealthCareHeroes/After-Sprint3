@@ -209,13 +209,11 @@
 													})
 											.then(
 													function(data) {
-														alert("Welcome "
+														alert("Welcome to healthify- "
 																+ data.firstName);
-														sessionStorage.setItem(
-																"userid",
-																data.id);
+													
 														window.location
-																.replace("http://localhost:8080/index.html");
+																.replace("http://localhost:8080/pages-login.html");
 													});
 								} // end of else
 							} // end of $scope.submit function

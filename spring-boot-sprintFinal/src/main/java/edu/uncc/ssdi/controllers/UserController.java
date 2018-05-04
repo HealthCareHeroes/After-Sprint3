@@ -34,6 +34,7 @@ public class UserController {
 		u.setPassword(password);
 		u.setFirstName(firstName); 
 		u.setLastName(lastName);
+		u.setRole("patient");
 		User retUser = userService.saveUser(u);
 		return retUser;
 	}

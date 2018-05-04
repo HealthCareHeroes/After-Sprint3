@@ -20,15 +20,10 @@ public class LoginController {
 	@RequestMapping(value="/validateLogin/", method = RequestMethod.POST) // Map ONLY GET Requests
 	public @ResponseBody User loginProcess(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String email , @RequestParam String password) {
-		System.out.println("Reached here");
-		// Login using a User's credentials matching a current user in the database
 		Login login = new Login();
 		login.setUserName(email);
 		login.setPassword(password);
-		System.out.println(login.getUserName());
-		System.out.println(login.getPassword());
 		User user = userservice.validateUser(login);
-		System.out.println(user.getRole());
 		return user;
 	}
 } // end of class
